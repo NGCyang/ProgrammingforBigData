@@ -8,35 +8,35 @@ import org.apache.hadoop.mapreduce.Mapper;
 import java.util.*;
 
 public class PageRankMapper
-	extends Mapper<LongWritable, Text, Text, Text> {
+    extends Mapper<LongWritable, Text, Text, Text> {
 
-	@Override
-	public void map(LongWritable key, Text value, Context context) 
-		throws IOException, InterruptedException { 
+    @Override
+    public void map(LongWritable key, Text value, Context context) 
+        throws IOException, InterruptedException { 
 
-			if (value == null) {
-				return;
-			}
+            if (value == null) {
+                return;
+            }
 
-			String[] page = value.toString().trim().split(" ");
+            String[] page = value.toString().trim().split(" ");
 
-			String currPage = page[0];
-			Double initPR = Double.parseDouble(page[page.length-1]);
+            String currPage = page[0];
+            Double initPR = Double.parseDouble(page[page.length-1]);
 
-			int linkNum = page.length - 2;
-			String links = "";
+            int linkNum = page.length - 2;
+            String links = "";
 
 
 
-			for (int i = 1; i < page.length-1; i++) {
-				links = links + page[i].trim() + " ";
-				context.write(new Text(page[i].trim()), 
-					new Text(currPage + " " + initPR/linkNum));
-			}
+            for (int i = 1; i < page.length-1; i++) {
+                links = links + page[i].trim() + " ";
+                context.write(new Text(page[i].trim()), 
+                    new Text(currPage + " " + initPR/linkNum));
+            }
 
-			context.write(new Text(currPage), 
-				new Text(links + "-1.0"));
-	}
+            context.write(new Text(currPage), 
+                new Text(links + "-1.0"));
+    }
 
 }
 
